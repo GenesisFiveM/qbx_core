@@ -314,7 +314,7 @@ function RemovePlayerFromJob(citizenid, jobName)
         local job = GetJob('unemployed')
         assert(job ~= nil, 'cannot find unemployed job. Does it exist in shared/jobs.lua?')
         player.PlayerData.job = toPlayerJob('unemployed', job, 0)
-        Save(player.PlayerData.source)
+        SaveOffline(player.PlayerData)
     end
 
     if not player.Offline then
@@ -539,7 +539,7 @@ function RemovePlayerFromGang(citizenid, gangName)
                 level = 0
             }
         }
-        Save(player.PlayerData.source)
+        SaveOffline(player.PlayerData)
     end
 
     if not player.Offline then
@@ -680,6 +680,16 @@ function CheckPlayerData(source, playerData)
     playerData.gangs = gangs or {}
     playerData.position = playerData.position or defaultSpawn
     playerData.items = {}
+
+    --Custom Changes to playerData
+    playerData.metadata.selectedRacerAuth = playerData.metadata.selectedRacerAuth or ""
+    playerData.metadata.selectedRacerName = playerData.metadata.selectedRacerName or playerData.citizenid
+    playerData.metadata.selectedCrew = playerData.metadata.selectedCrew or ""
+    playerData.metadata.laptop = playerData.metadata.laptop or {
+        background = 'default',
+        darkfont = false,
+    }
+
     return CreatePlayer(playerData --[[@as PlayerData]], Offline)
 end
 
